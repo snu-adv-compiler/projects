@@ -187,10 +187,14 @@ Learn how to add a command line option. Read [this page](http://llvm.org/release
 * Add a new function pass at the last stage of the optimization sequence (O1-3 optimization level)
 * Enable a command line option that enable your pass. (default is disabled)
 * Traverse basic blocks in each function and instructions in each basic block and use LLVM’s RTTI to count BinaryOperator, CallInst, CmpInst, GetElementPtrInst, PHINode, StoreInst, TerminatorInst, and LoadInst.
+* Add `README.md` file to the project root directory that describes briefly what kind of instructions the above classes represent.
+* `git add` your files and use `git diff --cached` to print the diffs. Generate the diff file by using I/O redirection. e.g.) `git diff --cached > proj1.diff` Make sure you stage all the changed files so that the diff file contains all the changes.
+
+Submit the diff file to ETL by the deadline.
 
 ## APPENDIX
 
-##### Emacs Commands
+### Emacs Commands
 
 | Key | Description |
 | ------------- | ------------- |
@@ -213,7 +217,7 @@ Note that GNU Emacs and GNU bash are the same GNU project and share many shortcu
 
 Also, `C-z`, `fg` commands can be of great help.
 
-##### Emacs-Gdb Command
+### Emacs-Gdb Commands
 
 In gdb window, C-c + followings. In other windows, C-x + C-a + followings.
 
