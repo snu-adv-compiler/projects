@@ -121,29 +121,20 @@ In the appendix at the end of this document, the major emacs commands and emacs 
 
 Here, we are going to write a new pass. This section is based on [this page](http://llvm.org/docs/WritingAnLLVMPass.html#basic-code-required), but slightly different since we are going to insert the pass into the regular optimization sequence.
 
-1. Download “TestPass.cpp” from ETL.
-1. Move it to (LLVM_SRC_DIR)/lib/Analysis.
-1. Add following to ~/.profile
-```{.bash}
-export PATH=”$PATH:(LLVM_OBJ_DIR)/Debug+Asserts/bin”
-```
-1. terminal$ . ~/.profile
-1. Add “(void) llvm::createTestPass();” to (LLVM_SRC_DIR)/include/llvm/LinkAllPasses.h
-1. Add “FunctionPass *createTestPass();” to (LLVM_SRC_DIR)/include/llvm/Analysis/Passes.h
-1. Add “void initializeTestPassPass(PassRegistry&);” to (LLVM_SRC_DIR)/include/llvm/InitializePasses.h
-1. terminal$ cd (LLVM_OBJ_DIR)
-1. Make arbitrary test.c of which CFG will be analyzed by your pass.
-1. terminal$ make -j8 clang-only BUILD_CLANG_ONLY=YES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cf) Everytime you change TestPass.cpp or test.c or all_file_you_ve_made, you need to do this again.
-1. terminal$ clang -mllvm -testpass -mllvm -time-passes -mllvm -debug-only=”testpass” test.c -O1
+1. Add `(void) llvm::createTestPass();` to `(LLVM_SRC_DIR)/include/llvm/LinkAllPasses.h`
+1. Add `FunctionPass *createTestPass();` to `(LLVM_SRC_DIR)/include/llvm/Analysis/Passes.h`
+1. Add `void initializeTestPassPass(PassRegistry&);` to `(LLVM_SRC_DIR)/include/llvm/InitializePasses.h`
+1. Download `TestPass.cpp` from ETL and put it in `(LLVM_SRC_DIR)/lib/Analysis` folder.
+1. Make sure you put `(LLVM_OBJ_DIR)/Debug+Asserts/bin` to your `PATH` environment variable
+1. `$ cd (LLVM_OBJ_DIR)`
+1. `$ make -j8 clang-only BUILD_CLANG_ONLY=YES      # Everytime you change any file, you need to do this again. If you miss the arguments, entire LLVM project will be built :(`
+1. `$ clang -mllvm -testpass -mllvm -debug-only=”testpass” test.c -O1`
 
 cf)
-If you don’t want to make PATH permanently, make shell script and run it instead of modifying “.profile”.
-
-cf2)
 To use emacs comfortably, download _emacs from ETL. Then, “mv _emacs ~/.emacs”.
 
-cf3)
-In terminal, if you enter “Ctrl+r wanted_command”, you can find what you’ve entered.
+cf2)
+In terminal, if you enter “Ctrl+r wanted_command”, you can search the command history.
 
 ### LLVM Core Classes
 
