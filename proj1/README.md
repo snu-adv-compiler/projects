@@ -162,12 +162,11 @@ Use `dbgs()` to print debug outputs. It can be used similar to cout, like this:
 dbgs() << “Printing debug outputs…\n”;
 ```
 
-call F.dump() &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cf) F is function type
- * display functions in IR
-
-call I->dump() &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cf) I is BasicBlock type
- * show which basic block I is
-
+Various LLVM Classes implement `dump()` or `print()` methods to show the contents of the class. Those methods are extremely useful when used inside `gdb`. See the following example.
+```
+(gdb) call F.dump()            // Display the contents of the function F. F is (Function) type.
+(gdb) call BB->dump()          // Display the contents of the basic block BB. BB is (BasicBlock*) type.
+```
 
 ### Adding a command line option
 
