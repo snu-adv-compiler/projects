@@ -1,7 +1,7 @@
 
 # Project 1
 
-### DUE: Monday, 4/4/2016 at 8:59pm
+### DUE: Monday, 4/4/2016 at 11:59pm
 
 In this project, we learn about basic LLVM usage, from installing LLVM to writing a simple pass. The recommended environment for your project is Ubuntu 12.04. 
 
