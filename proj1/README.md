@@ -121,14 +121,67 @@ In the appendix at the end of this document, the major emacs commands and emacs 
 
 Here, we are going to write a new pass. This section is based on [this page](http://llvm.org/docs/WritingAnLLVMPass.html#basic-code-required), but slightly different since we are going to insert the pass into the regular optimization sequence.
 
+1. First, create `TestPass.cpp` with the following code and put it in `lib/Analysis`
+
+```{c++}
+#define DEBUG_TYPE "testpass"
+
+#include "llvm/Pass.h"
+#include "llvm/IR/Function.h"
+#include "llvm/PassManager.h"
+#include "llvm/Support/Debug.h"
+#include "llvm/Analysis/Passes.h"
+#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+
+using namespace llvm;
+
+namespace {
+  struct TestPass : public FunctionPass {
+    static char ID;
+    TestPass() : FunctionPass(ID) {
+      initializeTestPassPass(*PassRegistry::getPassRegistry());
+    }
+
+    virtual bool runOnFunction(Function &F) {
+      DEBUG(dbgs() << "[TestPass]runOnFunction: " << F.getName() << '\n');
+    }
+  };
+}
+
+char TestPass::ID = 0;
+
+FunctionPass *llvm::createTestPass() {
+  return new TestPass();
+}
+
+static void addTestPass(const PassManagerBuilder &builder,
+			PassManagerBase &PM) {
+  PM.add(new TestPass());
+}
+
+static RegisterStandardPasses s(PassManagerBuilder::EP_OptimizerLast,
+                                addTestPass);
+
+INITIALIZE_PASS(TestPass, "test-pass", "Test Pass", false, false)
+
+```
+
+`RegisterStandardPasses` is defined in `include/llvm/Transforms/IPO/PassManagerBuilder.h`. Its constructor will make `addTestPass` to be called when the `PassManagerBuilder` puts the passes to the `PassManager`. `PassManagerBuilder::EP_OptimizerLast` will make the test pass to be called at the end of the optimization sequence. There are several other points where you can place your pass. You can look at `populate***PassManager` functions in `lib/Transforms/IPO/PassManagerBuilder.cpp` to see where your pass is going to be placed. (Of course, you can place your pass anywhere you like if you modify `PassManagerBuilder.cpp` directly)
+
+When the passes are added to the `PassManager`, `PM.add(new TestPass())` will be called to schedule our test pass. When the pass is finally run, `runOnFunction` is the place where the actual work is done. It's okay if you don't really understand how the code reached there. What you put in `runOnFunction` is more important.
+
+To make our code to be compiled and linked to `clang` and get it working, several code need to be added.
+
 1. Add `(void) llvm::createTestPass();` to `(LLVM_SRC_DIR)/include/llvm/LinkAllPasses.h`
-1. Add `FunctionPass *createTestPass();` to `(LLVM_SRC_DIR)/include/llvm/Analysis/Passes.h`
+1. Add `FunctionPass *createTestPass();` to `(LLVM_SRC_DIR)/include/llvm/Analysis/Passes.h`.
 1. Add `void initializeTestPassPass(PassRegistry&);` to `(LLVM_SRC_DIR)/include/llvm/InitializePasses.h`
-1. Download `TestPass.cpp` from ETL and put it in `(LLVM_SRC_DIR)/lib/Analysis` folder.
-1. Make sure you put `(LLVM_OBJ_DIR)/Debug+Asserts/bin` to your `PATH` environment variable
-1. `$ cd (LLVM_OBJ_DIR)`
-1. `$ make -j8 clang-only BUILD_CLANG_ONLY=YES      # Everytime you change any file, you need to do this again. If you miss the arguments, entire LLVM project will be built :(`
-1. `$ clang -mllvm -testpass -mllvm -debug-only=”testpass” test.c -O1`
+
+Now go to `(LLVM_OBJ_DIR)` and build the project again by executing `make -j8 clang-only BUILD_CLANG_ONLY=YES`. Everytime you change any file, you need to do this again. If you miss the arguments, the entire LLVM project will be built :(
+
+After the project is built, make sure you put `(LLVM_OBJ_DIR)/Debug+Asserts/bin` to your `PATH` environment variable and test your pass as follows.
+```
+clang -mllvm -testpass -mllvm -debug-only=”testpass” test.c -O1
+```
 
 cf)
 To use emacs comfortably, download _emacs from ETL. Then, “mv _emacs ~/.emacs”.
