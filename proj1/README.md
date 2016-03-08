@@ -119,7 +119,7 @@ Then, it will stop at the breakpoint. This is the main entry for the function pa
 
 In the appendix at the end of this document, the major emacs commands and emacs gdb plugin shortcuts are described for non-emacs users.
 
-### Make A Test Pass
+### Make a Test Pass
 
 Here, we are going to write a new pass. This section is based on [this page](http://llvm.org/docs/WritingAnLLVMPass.html#basic-code-required), but slightly different since we are going to insert the pass into the regular optimization sequence.
 
@@ -192,7 +192,7 @@ In the terminal, if you enter “Ctrl+r <string>”, you can search the command 
 
 Go to [this page](http://llvm.org/docs/ProgrammersManual.html#the-core-llvm-class-hierarchy-reference) and read about LLVM’s core classes such as Function, BasicBlock, Instruction, etc.
 
-### Basic traversal routines
+### Basic Traversal Routines
 
 Learn how to traverse the basic blocks in a function and instructions in a basic block.
 Go to [this page](http://llvm.org/docs/ProgrammersManual.html#basic-inspection-and-traversal-routines)
@@ -201,7 +201,7 @@ Go to [this page](http://llvm.org/docs/ProgrammersManual.html#basic-inspection-a
 
 Learn how to figure out how to figure out a type of a virtual class by using LLVM’s custom RTTI. Goto [this page](http://llvm.org/docs/ProgrammersManual.html#the-isa-cast-and-dyn-cast-templates) 
 
-### LLVM API for debuging
+### LLVM API for Debuging
 
 <!-- CFG, DT 관련은 project 2로 -->
 
@@ -220,14 +220,14 @@ Various LLVM Classes implement `dump()` or `print()` methods to show the content
 (gdb) call BB->dump()          // Display the contents of the basic block BB. BB is (BasicBlock*) type.
 ```
 
-### Adding a command line option
+### Adding a Command Line Option
 
 Learn how to add a command line option. Read [this page](http://llvm.org/releases/3.4.2/docs/CommandLine.html#quick-start-guide)
 (Just read the quick start guide)
 
-### Things you need to do in this project
-* Add a new function pass at the last stage of the optimization sequence (O1-3 optimization level)
-* Enable a command line option that enable your pass. (default is disabled)
+### Things You Need To Do In This Project
+
+* Add a command line option so that you can enable your pass only when you want. (disable your pass by default)
 * Traverse basic blocks in each function and instructions in each basic block and use LLVM’s RTTI to count BinaryOperator, CallInst, CmpInst, GetElementPtrInst, PHINode, StoreInst, TerminatorInst, and LoadInst.
 * Add `README.md` file to the project root directory that describes briefly what kind of instructions the above classes represent.
 * `git add` your files and use `git diff --cached` to print the diffs. Generate the diff file by using I/O redirection. e.g.) `git diff --cached > proj1.diff` Make sure you stage all the changed files so that the diff file contains all the changes.
@@ -259,7 +259,7 @@ Note that GNU Emacs and GNU bash are the same GNU project and share many shortcu
 
 Also, `C-z`, `fg` commands can be of great help.
 
-### Emacs-Gdb Commands
+### Emacs-GDB Commands
 
 In gdb window, C-c + followings. In other windows, C-x + C-a + followings.
 
