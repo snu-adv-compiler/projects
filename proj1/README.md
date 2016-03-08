@@ -182,7 +182,7 @@ Now go to `(LLVM_OBJ_DIR)` and build the project again by executing `make -j8 cl
 
 After the project is built, make sure you put `(LLVM_OBJ_DIR)/Debug+Asserts/bin` to your `PATH` environment variable and test your pass as follows.
 ```
-clang -mllvm -testpass -mllvm -debug-only=”testpass” test.c -O1
+clang -mllvm -debug-only=”testpass” test.c -O1
 ```
 
 cf)
