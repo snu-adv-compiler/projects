@@ -74,11 +74,13 @@ $ sudo apt-get install emacs
 $ cd (LLVM_OBJ_DIR)
 $ emacs -nw
 ```
-cf) LLVM_OBJ_DIR = build directory.
-
-cf2) LLVM_SRC_DIR = llvm directory.
+cf) `LLVM_OBJ_DIR` is the build directory. `LLVM_SRC_DIR` is llvm source directory.
 
 `-nw` option can be used to avoid GUI emacs. Since GUI involves a lot of traffic, sometimes you will prefer to use this option. You can omit it if the connection to the server is fast enough.
+
+cf)
+I've uploaded a sample emacs configuration file that may improve your emacs experience. To use it, download .emacs file and put it in your home folder.
+
 
 Inside emacs, do the following.
 ```
@@ -121,7 +123,7 @@ In the appendix at the end of this document, the major emacs commands and emacs 
 
 Here, we are going to write a new pass. This section is based on [this page](http://llvm.org/docs/WritingAnLLVMPass.html#basic-code-required), but slightly different since we are going to insert the pass into the regular optimization sequence.
 
-1. First, create `TestPass.cpp` with the following code and put it in `lib/Analysis`
+First, create `TestPass.cpp` with the following code and put it in `lib/Analysis`
 
 ```{c++}
 #define DEBUG_TYPE "testpass"
@@ -184,10 +186,7 @@ clang -mllvm -testpass -mllvm -debug-only=”testpass” test.c -O1
 ```
 
 cf)
-To use emacs comfortably, download _emacs from ETL. Then, “mv _emacs ~/.emacs”.
-
-cf2)
-In terminal, if you enter “Ctrl+r wanted_command”, you can search the command history.
+In the terminal, if you enter “Ctrl+r <string>”, you can search the command history.
 
 ### LLVM Core Classes
 
