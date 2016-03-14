@@ -229,10 +229,24 @@ Learn how to add a command line option. Read [this page](http://llvm.org/release
 
 * Add a command line option so that you can enable your pass only when you want. (disable your pass by default)
 * Traverse basic blocks in each function and instructions in each basic block and use LLVM’s RTTI to count BinaryOperator, CallInst, CmpInst, GetElementPtrInst, PHINode, StoreInst, TerminatorInst, and LoadInst.
+* You can use `test.c` in this github folder to test your pass.
 * Add `README.md` file to the project root directory that describes briefly what kind of instructions the above classes represent.
 * `git add` your files and use `git diff --cached` to print the diffs. Generate the diff file by using I/O redirection. e.g.) `git diff --cached > proj1.diff` Make sure you stage all the changed files so that the diff file contains all the changes.
 
 Submit the diff file to ETL by the deadline.
+
+Example output:
+```
+========= Instruction Count ========
+BinaryOperator - 3
+CallInst - 4
+CmpInst - 4
+GetElementPtrInst - 2
+PHINode - 3
+StoreInst - 1
+TerminatorInst - 6
+LoadInst - 1
+```
 
 ## APPENDIX
 
