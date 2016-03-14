@@ -104,7 +104,7 @@ Now we will actually run the program. Move to the gdb window and run the program
 
 ```
 C-x o                    // move to the next window (gdb window)
-(gdb) run -mllvm -debug-pass=Executions test.c -v
+(gdb) run -mllvm -debug-pass=Executions test.c -O1 -v
 ```
 
 `gdb` won’t stop at the breakpoint. Why? Recall that `clang` is actually the Clang driver. The actual compilation is done by `clang -cc1`. `gdb` just followed the parent thread, so the breakpoint in the child thread was ignored.
