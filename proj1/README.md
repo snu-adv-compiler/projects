@@ -227,7 +227,7 @@ Learn how to add a command line option. Read [this page](http://llvm.org/release
 
 ### Things You Need To Do In This Project
 
-* Add a command line option so that you can enable your pass only when you want. (disable your pass by default)
+* Add a command line option so that you can enable your pass only when you want by passing `-mllvm -testpass` option. (disable your pass by default)
 * Traverse basic blocks in each function and instructions in each basic block and use LLVM’s RTTI to count BinaryOperator, CallInst, CmpInst, GetElementPtrInst, PHINode, StoreInst, TerminatorInst, and LoadInst.
 * You can use `test.c` in this github folder to test your pass.
 * Add `README.md` file to the project root directory that describes briefly what kind of instructions the above classes represent.
