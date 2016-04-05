@@ -1,0 +1,34 @@
+diff --git a/include/llvm/Analysis/CFGPrinter.h b/include/llvm/Analysis/CFGPrinter.h
+index 39e90eb..28d2402 100644
+--- a/include/llvm/Analysis/CFGPrinter.h
++++ b/include/llvm/Analysis/CFGPrinter.h
+@@ -119,6 +119,16 @@ struct DOTGraphTraits<const Function*> : public DefaultDOTGraphTraits {
+     }
+     return "";
+   }
++
++  static std::string getNodeAttributes(const BasicBlock *BB,
++                                       const Function *F) {
++    std::map<const BasicBlock *, std::string>::const_iterator I =
++      F->NodeGraphAttrs.find(BB);
++
++    if (I != F->NodeGraphAttrs.end())
++      return I->second;
++    return "";
++  }
+ };
+ } // End llvm namespace
+ 
+diff --git a/include/llvm/IR/Function.h b/include/llvm/IR/Function.h
+index bba7ecd..a50027c 100644
+--- a/include/llvm/IR/Function.h
++++ b/include/llvm/IR/Function.h
+@@ -80,6 +80,8 @@ public:
+   typedef ArgumentListType::iterator arg_iterator;
+   typedef ArgumentListType::const_iterator const_arg_iterator;
+ 
++  std::map<const BasicBlock *, std::string> NodeGraphAttrs;
++
+ private:
+   // Important things that make up a function!
+   BasicBlockListType  BasicBlocks;        ///< The basic blocks
