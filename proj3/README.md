@@ -32,6 +32,28 @@ if (b < 0)
 If you have found out that the denominator in the division instruction can become zero, you need to modify the IR so that the divide-by-zero exception is not triggered at runtime. Instead, if the value of the denominator is zero at runtime, it must be set to the highest integer value. In order to do this, you should create new basic blocks (or split existing basic block) and add new instructions.
 (click [here](http://llvm.org/releases/3.4.2/docs/ProgrammersManual.html#making-simple-changes)) and for some helpful info.)
 
+Couple of hints for the project:
+- Division instruction is a `BinaryOperator` which includes add, sub, etc. But as you can see from the class hierarchy, `BinaryOperator` has no derived classes. You can figure out whether the instruction is a division instruction by using `getOpcode()`
+- (Possible values) propagation rule example for `%c = add i32 %a, %b`:
+
+| %a       | %b        | %c             |
+| -------- |-----------| ---------------|
+| 10       | unknown   | unknown        |
+| 10       | 5         | 15             |
+| 1, 3     | 10, 50    | 11, 13, 51, 53 |
+
+- (Possible values) propagation rule example for `%c = phi i32 [ %a, %if.else1 ], [ %b, %if.then ]` :
+
+| %a       | %b        | %c             |
+| -------- |-----------| ---------------|
+| 10       | unknown   | unknown        |
+| 10       | 5         | 10, 5          |
+| 1, 3     | 10, 50    | 1, 3, 10, 50   |
+
+- Propagation rule example for `%c = select i1 %1, i32 %a, i32 %b` is the same as `phi`
+- Use `BasicBlock::Create()` to create new basic blocks or `BasicBlock::splitBasicBlock()` to split existing basic blocks
+- Use `IRBuilder` to create instructions
+- Be careful when using iterator and modifying the IR: Depending on the implementation, it may not be safe to use the iterator after modifying the IR. It might be better to find all the division instructions in the IR that need to be modified first before modifying IR.
 
 ### Example output while running your pass
 
