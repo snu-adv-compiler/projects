@@ -1,6 +1,6 @@
 # Project 3
 
-### DUE: Monday, June 13, 2016 at 11:59pm
+### DUE: Wednesday, June 15, 2016 at 11:59pm
 
 In this project, we will make a pass that will actually change the IR. We would like to change the program so that, if there is a integer division in the program we want to make sure that no divide-by-zero will occur. We only want to change the division if there is probability that the denominator becomes zero at runtime. Thus the project consists of two part. First you need to analyze the data flow to find out if the denominator can become zero. Next, you need to change the IR (by adding some instructions and altering existing instructions… ) so that if the denominator becomes zero, instead of division instruction, the result will be set to the maximum integer value.
 
