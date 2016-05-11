@@ -72,3 +72,7 @@ Possible divide by zero!!!
 Instruction : %div46 = sdiv i32 %add45, %f.1
 Possible values for the denominator : 1, 66
 ```
+
+### Grading
+
+We may change the numbers and maybe some instructions in the `test.c` file while grading. But we will make sure there will be no significant change to the code structure and there will be no new instruction type.
