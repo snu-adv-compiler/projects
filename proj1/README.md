@@ -84,9 +84,11 @@ I've uploaded a sample emacs configuration file that may improve your emacs expe
 
 Inside emacs, do the following.
 ```
-M-x gdb               cf) M-x = alt+x, C-x = Ctrl+x
-Run gdb (like this): gdb --annotate=3 clang
+M-x gud-gdb               cf) M-x = alt+x, C-x = Ctrl+x
+Run gud-gdb (like this): gdb --fullname clang
 ```
+
+cf) gud-gdb is faster than gdb. See [this](https://www.gnu.org/software/emacs/manual/html_node/emacs/Starting-GUD.html#Starting-GUD).
 
 This will open `clang` binary file and load debug symbols to get ready for debugging session. We will now set a breakpoint at the entry point of a pass.
 
