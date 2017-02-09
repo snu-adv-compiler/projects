@@ -3,7 +3,7 @@
 
 ### DUE: Monday, 4/4/2016 at 11:59pm
 
-In this project, we learn about basic LLVM usage, from installing LLVM to writing a simple pass. The recommended environment for your project is Ubuntu 12.04. 
+In this project, we learn about basic LLVM usage, from installing LLVM to writing a simple pass. The recommended environment for your project is Ubuntu 14.04. 
 
 ### What is LLVM & Clang?
 
@@ -13,31 +13,37 @@ Clang is a C-family frontend for LLVM. It takes the source code written in C/C++
 
 ### Install LLVM & Clang
 
-First, we will install LLVM & Clang. Since we are going to modify LLVM in our project, we will download the source code. LLVM project is based on SVN version control system, but we will use Git. Execute the following commands.
+First, we will install LLVM & Clang. Since we are going to modify LLVM in our project, we will download the source code. LLVM project is based on SVN version control system, but we will use Git. 
+
+First, install necessary tools
 
 ```{.bash}
 sudo apt-get update && sudo apt-get upgrade
 sudo apt-get install GCC g++ gv graphviz subversion git
-git clone -b release_34 https://github.com/llvm-mirror/llvm.git
+```
+
+We need cmake version >= 3.4.3.  Download and install and put it into your `PATH` environment.
+
+Optionally, download and build `ninja` build system, which is the alternatives to GNU make developed by Google. (don't use `sudo apt-get install ninja`, it will install different tool)
+
+When you're ready, install LLVM & Clang:
+
+```{.bash}
+git clone -b release_38 https://github.com/llvm-mirror/llvm.git --depth=1
 cd llvm/tools
-git clone -b release_34 https://github.com/llvm-mirror/clang.git
+git clone -b release_38 https://github.com/llvm-mirror/clang.git --depth=1
 cd ../..
 mkdir build
 cd build
-../llvm/configure --disable-optimized --enable-targets=host
-make -j8 clang-only BUILD_CLANG_ONLY=YES
+cmake -DCMAKE_BUILD_TYPE="Debug" -DLLVM_TARGETS_TO_BUILD="host" -DLLVM_PARALLEL_COMPILE_JOBS="4" -DLLVM_PARALLEL_LINK_JOBS="1" -DLLVM_BUILD_TOOLS="OFF" -DLLVM_OPTIMIZED_TABLEGEN="ON" -DCLANG_ENABLE_ARCMT="OFF" -DCLANG_TOOL_CLANG_CHECK_BUILD="OFF" -DCLANG_TOOL_CLANG_FORMAT_BUILD="OFF" -DCLANG_TOOL_CLANG_FORMAT_VS_BUILD="OFF" -DCLANG_TOOL_CLANG_FUZZER_BUILD="OFF" -DCLANG_TOOL_C_ARCMT_TEST_BUILD="OFF" -DCLANG_TOOL_C_INDEX_TEST_BUILD="OFF" -DCLANG_TOOL_DIAGTOOL_BUILD="OFF" -DCLANG_TOOL_LIBCLANG_BUILD="OFF" -GNinja ../llvm                # use -GNinja if you want to use ninja build system
+make              # or ninja if you used -GNinja
 ```
 
-`--disable-optimized` is used for debug build instead of release build. Debug macros, debug symbols, assertions and other facilities helpful for debugging will be included. As the result, binary size will be very big (around 10GB). We need debug build because we will modify and debug LLVM. 
+`-DCMAKE_BUILD_TYPE="Debug"` is used for debug build instead of release build. Debug macros, debug symbols, assertions and other facilities helpful for debugging will be included. As the result, binary size will be very big (around 10GB). We need debug build because we will modify and debug LLVM.
 
-`clang-only` and `BUILD_CLANG_ONLY=YES` options are used to avoid building a bunch of LLVM tools including `llc`, `opt`, etc. Most of the use of LLVM functionality can be done with `clang` command so we can use those options to save compilation time.
+Other options are for minimizing build time by excluding some unnecessary components. You can ignore cmake warnings. Adjust PARALLEL_XXX_JOBS according to your system spec. PARALLEL_COMPILE_JOBS=<number of virtual processors>, PARALLEL_LINK_JOBS=<size of RAM in GB>/4 is recommended.
 
-cf)
-`-j<n>` option determines how many threads will be used for compilation. It may be changed depending on the number of cores in CPU.
-
-Recommended RAM memory is 3GB or more.
-
-If the build is successful, the binaries will be created in `build/Debug+Asserts/bin`. For easy access to the `clang` binary, you should add this folder to the `PATH` environment variable. You can add it to the `.profile` or its equivalent to set it up automatically every time you connect to the shell. Instead, you can create a file that can be fed to the `source` bash command and only `source` it when it’s needed.
+If the build is successful, the binaries will be created in `build/bin`. For easy access to the `clang` binary, you should add this folder to the `PATH` environment variable. You can add it to the `.profile` or its equivalent to set it up automatically every time you connect to the shell. Instead, you can create a file that can be fed to the `source` bash command and only `source` it when it’s needed.
 
 ### Using `clang`
 <!-- LLVM 기본 사용법 -Ox, -emit-llvm, -c, -S, -o -->
