@@ -19,12 +19,12 @@ First, install necessary tools
 
 ```{.bash}
 sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install GCC g++ gv graphviz subversion git
+sudo apt-get install GCC g++ gv graphviz subversion git ninja-build
 ```
 
 We need cmake version >= 3.4.3.  Download and install and put it into your `PATH` environment.
 
-Optionally, download and build `ninja` build system, which is the alternatives to GNU make developed by Google. (don't use `sudo apt-get install ninja`, it will install different tool)
+`ninja` build system is optional. It is the alternatives to GNU make developed by Google.
 
 When you're ready, install LLVM & Clang:
 
@@ -35,8 +35,8 @@ git clone -b release_38 https://github.com/llvm-mirror/clang.git --depth=1
 cd ../..
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE="Debug" -DLLVM_TARGETS_TO_BUILD="host" -DLLVM_PARALLEL_COMPILE_JOBS="4" -DLLVM_PARALLEL_LINK_JOBS="1" -DLLVM_BUILD_TOOLS="OFF" -DLLVM_OPTIMIZED_TABLEGEN="ON" -DCLANG_ENABLE_ARCMT="OFF" -DCLANG_TOOL_CLANG_CHECK_BUILD="OFF" -DCLANG_TOOL_CLANG_FORMAT_BUILD="OFF" -DCLANG_TOOL_CLANG_FORMAT_VS_BUILD="OFF" -DCLANG_TOOL_CLANG_FUZZER_BUILD="OFF" -DCLANG_TOOL_C_ARCMT_TEST_BUILD="OFF" -DCLANG_TOOL_C_INDEX_TEST_BUILD="OFF" -DCLANG_TOOL_DIAGTOOL_BUILD="OFF" -DCLANG_TOOL_LIBCLANG_BUILD="OFF" -GNinja ../llvm                # use -GNinja if you want to use ninja build system
-make              # or ninja if you used -GNinja
+cmake -DCMAKE_BUILD_TYPE="Debug" -DLLVM_TARGETS_TO_BUILD="host" -DLLVM_PARALLEL_COMPILE_JOBS="4" -DLLVM_PARALLEL_LINK_JOBS="1" -DLLVM_BUILD_TOOLS="OFF" -DLLVM_OPTIMIZED_TABLEGEN="ON" -GNinja ../llvm     # -GNinja is needed if you want to use ninja build system
+make     # or ninja if you used -GNinja
 ```
 
 `-DCMAKE_BUILD_TYPE="Debug"` is used for debug build instead of release build. Debug macros, debug symbols, assertions and other facilities helpful for debugging will be included. As the result, binary size will be very big (around 10GB). We need debug build because we will modify and debug LLVM.
